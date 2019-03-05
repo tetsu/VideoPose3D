@@ -15,6 +15,7 @@ import numpy as np
 import subprocess as sp
 import glob
 import cv2
+import gc
 
 def get_resolution(filename):
     command = ['ffprobe', '-v', 'error', '-select_streams', 'v:0',
@@ -323,8 +324,6 @@ def render_animation_valid(input_pose_kinect, keypoints, poses, skeleton, fps, b
                                                 [kin_pos[j, 2], kin_pos[j_parent, 2]], zdir='z', c=col))
                     index_k+=1
 
-
-
             points = ax_in.scatter(*keypoints[i].T, 5, color='red', edgecolors='white', zorder=10)
             #points2 = axk.scatter(input_pose_kinect[i,:,0], input_pose_kinect[i,:,2], zs=input_pose_kinect[i,:,1], zdir='y', s=20, c='blue', depthshade=True, marker='s')
 
@@ -351,10 +350,6 @@ def render_animation_valid(input_pose_kinect, keypoints, poses, skeleton, fps, b
                     lines_kinect[j-1][0].set_3d_properties([kin_pos[j, 2], kin_pos[j_parent, 2]], zdir='z')
                     index_k += 1
 
-
-
-
-
             #points2._offsets3d  = (input_pose_kinect[i,:,0], input_pose_kinect[i,:,2], input_pose_kinect[i,:,1])
             points.set_offsets(keypoints[i])
 
@@ -376,4 +371,6 @@ def render_animation_valid(input_pose_kinect, keypoints, poses, skeleton, fps, b
     else:
         raise ValueError('Unsupported output format (only .mp4 and .gif are supported)')
     plt.close()
-    print("Done thanks for running!!!")
+    del all_frames
+    gc.collect()
+    print("Finished Vis")

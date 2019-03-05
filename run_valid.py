@@ -4,6 +4,7 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 #
+import gc
 
 import numpy as np
 
@@ -23,6 +24,32 @@ from common.loss import *
 from common.generators import ChunkedGenerator, UnchunkedGenerator
 from time import time
 from common.utils import deterministic_random
+
+
+# Stuff we need to define
+pathToImages = "/home/narvis/study/TobiKinectRawData/P1A6"
+vidOrImage = '.mp4'
+
+BasePath2dKeypoints = '/home/narvis/study/study2dDetections'
+BasePathOutput = "/home/narvis/study/TobiKinectFinal"
+BaseKinect3DKeypoints = "/home/narvis/study/TobiKinectRawData/"
+width_of = 1920
+height_of = 1080
+manual_fps = 29
+#########
+PandA = os.path.basename(pathToImages)
+path2dKeypoints = os.path.join(BasePath2dKeypoints,PandA, 'data_2d_detections.npz')
+kinect3DKeypointFile = os.path.join(BaseKinect3DKeypoints, PandA)
+outputPath = os.path.join(BasePathOutput, PandA)
+outputPathFiles = os.path.join(outputPath, PandA + vidOrImage)
+if not os.path.exists(outputPath):
+        os.makedirs(outputPath)
+
+
+###
+### choose witch file to align poses
+###
+
 
 def loadtxt(path):
     with open(path, "r") as fptr:
@@ -59,14 +86,17 @@ def loadKinect(dir = "/home/narvis/Dev/data_kinect/pose_data/"):
 from rigid_trans_test import vizfigs, umeyama
 
 def transformKinectForVp3D(kinectposes, Vp3Dposes):
-    index =  325
-    f_Vp3Dpose = Vp3Dposes[index]
-    f_kinectpose = kinectposes[index]
-    vizfigs(np.transpose(f_kinectpose), np.transpose(f_Vp3Dpose))
-    c, R, t = umeyama(f_kinectpose, f_Vp3Dpose)
-    kin_transformed = f_kinectpose.dot(c * R) + t
-    vizfigs(np.transpose(kin_transformed), np.transpose(f_Vp3Dpose))
-    new_kinectposes = kinectposes[:].dot(c * R) +t
+    index = kinectposes.shape[0]//555
+    #c, R, t = umeyama(f_kinectpose, f_Vp3Dpose)
+    #new_kinectposes = kinectposes[:].dot(c * R) + t
+
+    cc = np.float64(0.760024)
+    RR = np.array([[-0.56961066,  0.81877764,  0.07174169],
+     [0.11426349, -0.00755279,  0.99342177],
+    [0.81393338, 0.57406108, -0.08925424]])
+    tt = np.array([-1.57987305, -1.10791479, 0.82885445])
+    new_kinectposes = kinectposes[:].dot(cc * RR) + tt
+
     return new_kinectposes, Vp3Dposes
 
 
@@ -90,12 +120,7 @@ for subject in dataset.subjects():
         anim['positions_3d'] = positions_3d
 
 print('Loading 2D detections...')
-# Stuff we need to define
-path2dKeypoints = 'data/data_2d_detections.npz'
-width_of = 1920
-height_of = 1080
-manual_fps = 29
-#########
+
 
 keypoints = np.load(path2dKeypoints)
 keypoints_symmetry = keypoints['metadata'].item()['keypoints_symmetry']
@@ -289,11 +314,10 @@ prediction = camera_to_world(prediction, R=rot, t=0)
 # We don't have the trajectory, but at least we can rebase the height
 prediction[:, :, 2] -= np.min(prediction[:, :, 2])
 
-predictionsKinect = loadKinect(dir = "/home/narvis/study/TobiKinectRawDataTest/P1A3")
+predictionsKinect = loadKinect(dir =kinect3DKeypointFile )
 predictionsKinect, prediction = transformKinectForVp3D(predictionsKinect, prediction)
 
-from rigid_trans_test import vizfigs
-vizfigs(np.transpose(predictionsKinect[150]), np.transpose(prediction[150]))
+
 anim_output = {'Video3D': prediction}
 
 
@@ -305,9 +329,12 @@ input_keypoints = image_coordinates(input_keypoints[..., :2], w=width_of, h=heig
 
 from common.visualization import render_animation_valid
 render_animation_valid(predictionsKinect, input_keypoints, anim_output,
-                 dataset.skeleton(), manual_fps, 3000, cam['azimuth'], "outputs/tesst.mp4",
+                 dataset.skeleton(), manual_fps, 3000, cam['azimuth'], outputPathFiles,
                  limit=-1, downsample=1, size=5,
-                 input_image_folder='/home/narvis/study/TobiKinectRawDataTest/P1A3', viewport=(width_of, height_of),
+                 input_image_folder=pathToImages, viewport=(width_of, height_of),
                  input_video_skip=0)
 
 
+gc.collect()
+
+print("finished")
