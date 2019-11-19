@@ -9,3 +9,9 @@ data/own2DFiles/*
 
 __pycache__/
 *.py[cod]
+
+
+*.mp4
+*.webm
+*.pkl
+splitted_scating/
