@@ -16,6 +16,9 @@ import subprocess as sp
 import glob
 import cv2
 
+# path of ffmpeg installed via apt, but not via conda
+plt.rcParams['animation.ffmpeg_path'] =  '/usr/bin/ffmpeg'
+
 def get_resolution(filename):
     command = ['ffprobe', '-v', 'error', '-select_streams', 'v:0',
                '-show_entries', 'stream=width,height', '-of', 'csv=p=0', filename]
@@ -81,7 +84,7 @@ def render_animation(keypoints, poses, skeleton, fps, bitrate, azim, output, vie
         ax.set_xlim3d([-radius/2, radius/2])
         ax.set_zlim3d([0, radius])
         ax.set_ylim3d([-radius/2, radius/2])
-        ax.set_aspect('equal')
+        # ax.set_aspect('equal')
         ax.set_xticklabels([])
         ax.set_yticklabels([])
         ax.set_zticklabels([])

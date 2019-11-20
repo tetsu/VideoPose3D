@@ -12,6 +12,10 @@ __pycache__/
 
 
 *.mp4
+*.npz
 *.webm
 *.pkl
+*.zip
 splitted_scating/
+output/
+demo/
