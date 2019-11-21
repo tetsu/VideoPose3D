@@ -1,4 +1,4 @@
-# Installation Instruction for Cuda 10.0
+## Installation Instruction for Cuda 10.0
 
 
 1. Install Anaconda, and create conda environment for detectron
@@ -61,41 +61,66 @@
    mv ~/Download/model_final.pkl ~/github/VideoPose3D/detectron_tools
    ```
 
+## Download or Prepare for a video file, and split into frames
+1. To download a video file from Youtube, instal youtube-dl. For example, you can install it through pip.
+   ```
+   pip install youtube-dl
+   ```
+
+1. Download a video file from youtube. One example below:
+   ```
+   youtube-dl -f mp4 https://www.youtube.com/watch?v=LXO-jKksQkM
+   ```
+
+1. Install ffmpeg via apt (ffmpeg installed by pip does not work properly)
+   ```
+   sudo apt install ffmpeg
+   ```
+
+1. Split the video file into images using ffmpeg. (change file name and folder as you want, but make sure the folder exists.)
+   ```
+   ffmpeg -i input_video_file.mp4 -r 25 splitted_scating/InputVideoFileFolder/output%04d.png
+   ```
+
+## Run Detectron
+
 1. Go to detectron_tools directory, and run detectron
    ```
    cd ~/github/VideoPose3D/detectron_tools
    python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output --wts model_final.pkl splitted_scating
    ```
 
-1. Run 3D
+   python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/PumpedUpKicks --image-ext jpg --wts model_final.pkl splitted_scating/PumpedUpKicks
+
+
+## Setup VideoPose3D Environment
+
+1. Create a new Anaconda environment for VideoPose3D
    ```
-   python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video "out_cutted.mp4" --viz-camera 0 --viz-output output_video.mp4 --viz-size 5 --viz-downsample 1 --viz-skip 0
+   conda create -n videopose python=3.6 numpy=1.16.2 matplotlib scipy yaml pyyaml=3.12 protobuf opencv cython
+   conda activate videopose
+   conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
+   conda isntall cudnn
+   ```
 
-   python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video "out_cutted.mp4" --viz-camera 0 --viz-output output.gif --viz-size 5 --viz-downsample 1
+1. Download and locate necessary files
+   ```
+   cd ~/github/VideoPose3D/data
+   wget https://www.dropbox.com/s/e35qv3n6zlkouki/h36m.zip
+   python prepare_data_h36m.py --from-archive h36m.zip
 
-   python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video "out_cutted.mp4" --viz-camera 0 --viz-output output.mp4 --viz-size 5 --viz-downsample 1
+   cd ~/github/VideoPose3D/checkpoint
+   wget https://dl.fbaipublicfiles.com/video-pose-3d/d-pt-243.bin
+   ```
 
+1. Move the video file to project's root directory (example in this case)
+   ```
+   mv ~/github/VideoPose3D/detection_tools/input_video_file.mp4 ~/github/VideoPose3D/
+   ```
+
+1. Run VideoPose3D
+   ```
    python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video InTheWildData/out_cutted.mp4 --viz-camera 0 --viz-output output_scater.mp4 --viz-size 5 --viz-downsample 1 --viz-skip 9
-   ```
-
-## Detectron Installation by building
-
-1. Install prerequisits for building pytorch 2
-   ```
-   pip install numpy>=1.13 pyyaml>=3.12 matplotlib opencv-python>=3.2 Cython mock scipy mkl mkl-include setuptools cmake cffi typing
-   ```
-
-1. Clone pytorch git repo, move to pytorch directory, and update submodule
-   ```
-   git clone https://github.com/pytorch/pytorch.git
-   cd pytorch
-   git submodule update --init --recursive
-   cd ..
-   ```
-
-1. Instal pytorch and caffe2
-   ```
-   FULL_CAFFE2=1 python setup.py install
    ```
 
 

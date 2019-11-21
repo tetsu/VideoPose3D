@@ -182,13 +182,16 @@ def main(args):
             out_when_no_box=args.out_when_no_box
         )
 
-        cls_boxes_np = np.asarray(cls_boxes)
-        cls_boxes_prob = cls_boxes_np[1][:,4]
-        idx_max_prob = np.argmax(cls_boxes_prob)
+        try:
+            cls_boxes_np = np.asarray(cls_boxes)
+            cls_boxes_prob = cls_boxes_np[1][:,4]
+            idx_max_prob = np.argmax(cls_boxes_prob)
 
-        cls_keyps_max_prob = cls_keyps[1][idx_max_prob]
-        pose_x_y_prob_after_softmax = cls_keyps_max_prob[[0,1,3]]
-        glob_keypoints.append(np.transpose(pose_x_y_prob_after_softmax))
+            cls_keyps_max_prob = cls_keyps[1][idx_max_prob]
+            pose_x_y_prob_after_softmax = cls_keyps_max_prob[[0,1,3]]
+            glob_keypoints.append(np.transpose(pose_x_y_prob_after_softmax))
+        except:
+            break
 
     dictionarry_keypoints={'S1': {'Directions 1' : np.asarray([glob_keypoints])}}
     metadata = {'layout_name': 'h36m', 'num_joints': 17, 'keypoints_symmetry': [[4, 5, 6, 11, 12, 13], [1, 2, 3, 14, 15, 16]]}
