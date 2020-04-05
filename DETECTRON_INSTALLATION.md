@@ -98,7 +98,7 @@
    cd ..
    ```
 
-1. Download Weight File: [File](https://www.dropbox.com/sh/vi5byf0du9g50lw/AABGVezeuHuipOzaFGdGGvbaa?dl=0), and move it to detectron_tools directory
+1. Download [Weight File](https://dl.fbaipublicfiles.com/detectron/37698009/12_2017_baselines/e2e_keypoint_rcnn_R-101-FPN_s1x.yaml.08_45_57.YkrJgP6O/output/train/keypoints_coco_2014_train%3Akeypoints_coco_2014_valminusminival/generalized_rcnn/model_final.pkl) for e2e_keypoint_rcnn_R-101-FPN_s1x.yaml, and move it to detectron_tools directory. More files [here](https://github.com/facebookresearch/Detectron/blob/master/MODEL_ZOO.md)
    ```
    mv ~/Download/model_final.pkl ~/github/VideoPose3D/detectron_tools
    ```
@@ -131,18 +131,37 @@
    cd ~/github/VideoPose3D/detectron_tools
    python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output --wts model_final.pkl splitted_scating
    ```
-
-   python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/PumpedUpKicks --image-ext jpg --wts model_final.pkl splitted_scating/PumpedUpKicks
+   Example
+   ```
+   python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/pumped --output-ext png --image-ext jpg --wts model_final.pkl video/pumped
+   ```
 
 
 ## Setup VideoPose3D Environment
 
 1. Create a new Anaconda environment for VideoPose3D
    ```
-   conda create -n videopose python=3.6 numpy=1.16.2 matplotlib scipy yaml pyyaml=3.12 protobuf opencv cython
-   conda activate videopose
-   conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
-   conda isntall cudnn
+   conda create -n VideoPose3D python=3.6 numpy=1.16.2 matplotlib scipy yaml pyyaml=3.12 protobuf opencv cython future
+   conda activate VideoPose3D
+   conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
+   conda install cudnn
+   ```
+
+1. Install Coco API in VideoPose3D environment
+   ```
+   cd ~/github (or any directory of your choice)
+   git clone https://github.com/cocodataset/cocoapi.git
+   cd cocoapi/PythonAPI
+   make install
+   ```
+
+1. Install Detectron in VideoPose3D environment
+   ```
+   cd ~/github (or any directory of your choice)
+   git clone git@github.com:facebookresearch/Detectron.git
+   cd Detectron
+   pip install -r requirements.txt
+   make
    ```
 
 1. Download and locate necessary files
