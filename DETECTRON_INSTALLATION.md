@@ -8,8 +8,14 @@
    ```
 
 1. Install pytorch with anaconda
+
+   For Cuda 10.0
    ```
    conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
+   ```
+   For Cuda 10.1
+   ```
+   conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
    ```
 
 1. Install caffe2 with anaconda
@@ -19,14 +25,20 @@
 
 1. Install other dependencies
    ```
+   conda install mkl mkl-include matplotlib mock scipy cmake cffi typing Cython
+   ```
+
+   Or
+   ```
    pip install numpy>=1.13 pyyaml>=3.12 matplotlib opencv-python>=3.2 Cython mock scipy mkl mkl-include setuptools cmake cffi typing
    ```
+
 
 1. Install Coco API
    ```
    cd ~/github (or any directory of your choice)
    git clone https://github.com/cocodataset/cocoapi.git
-   cd cocoapi
+   cd cocoapi/PythonAPI
    make install
    ```
 
@@ -37,6 +49,11 @@
    cd Detectron
    pip install -r requirements.txt
    make
+   ```
+
+1. Test Detectron
+   ```
+   python detectron/tests/test_spatial_narrow_as_op.py
    ```
 
 1. Install ffmpeg to your system (Ubuntu in this case)
@@ -51,9 +68,34 @@
    git clone git@github.com:tobiascz/VideoPose3D.git
    ```
 
-1. Copy config file from Detectron
+1. Create conda environment for VideoPose3D
+   ```
+   conda create -n VideoPose3D python=3.6
+   conda activate VideoPose3D
+   ```
+
+1. Install pytorch with anaconda
+
+   For Cuda 10.0
+   ```
+   conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
+   ```
+   For Cuda 10.1
+   ```
+   conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
+   ```
+
+1. Copy config file from Detectron to VideoPose3D
    ```
    cp ~/github/Detectron/configs/12_2017_baselines/e2e_keypoint_rcnn_X-101-32x8d-FPN_s1x.yaml ~/github/VideoPose3D/detectron_tools
+   ```
+
+1. Download and setup pretrained h36m file
+   ```
+   cd data
+   wget https://www.dropbox.com/s/e35qv3n6zlkouki/h36m.zip
+   python prepare_data_h36m.py --from-archive h36m.zip
+   cd ..
    ```
 
 1. Download Weight File: [File](https://www.dropbox.com/sh/vi5byf0du9g50lw/AABGVezeuHuipOzaFGdGGvbaa?dl=0), and move it to detectron_tools directory
