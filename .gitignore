@@ -1,11 +1,13 @@
 .idea/
+.vscode/
 checkpoint/*
 outputs/*
 !outputs/output_scater.mp4
 data/data_3d_h36m.npz
 data/own2DFiles/*
-
-
+data_2d_detections.npz
+data_2d_detections_scater.npz
+data_2d_detections_scater.npz
 
 __pycache__/
 *.py[cod]

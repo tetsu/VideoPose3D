@@ -121,7 +121,12 @@
 
 1. Split the video file into images using ffmpeg. (change file name and folder as you want, but make sure the folder exists.)
    ```
-   ffmpeg -i input_video_file.mp4 -r 25 splitted_scating/InputVideoFileFolder/output%04d.png
+   ffmpeg -i input_video_file.mp4 -r 25 splitted_scating/InputVideoFileFolder/output%05d.png
+   ```
+
+   Example
+   ```
+   ffmpeg -i pumped.mp4 pumped/output%05d.png
    ```
 
 ## Run Detectron
@@ -136,6 +141,15 @@
    python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/pumped --output-ext png --image-ext jpg --wts model_final.pkl video/pumped
    ```
 
+   Example 2
+   ```
+   python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/usa01 --output-ext png --image-ext jpg --wts model_final.pkl video/usa01
+   ```
+
+1. Move generated data_2d_detections.npz file to $VideoPose3D/data
+   ```
+   mv ~/github/VideoPose3D/{file location} ~/github/VideoPose3D/data
+   ```
 
 ## Setup VideoPose3D Environment
 
@@ -184,16 +198,23 @@
    python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video InTheWildData/out_cutted.mp4 --viz-camera 0 --viz-output output_scater.mp4 --viz-size 5 --viz-downsample 1 --viz-skip 9
    ```
 
+   Example
+   ```
+   python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video detectron_tools/video/pumped.mp4 --viz-camera 0 --viz-output output_scater.mp4 --viz-size 5 --viz-downsample 1 --viz-skip 9
+   ```
+
 
 ## References
+1. [Detectron](https://github.com/facebookresearch/Detectron)
+1. [Detectron2](https://github.com/facebookresearch/detectron2)
 1. [Detectronをうごかしてみた](https://qiita.com/1O1/items/d3b982a76b1c43401acb)
+1. [VideoPose3D](https://github.com/tetsu/VideoPose3D)
+1. [VideoPose3Dを動かしてみた（Detectronから）](https://qiita.com/timtoronto634/items/ee018ac89e6b9f779194)
+1. [Videopose3Dを理解してみる1（すこし変えてみる）](https://qiita.com/kwnbbnwk/items/712ccc506c4fadea0a20)
+1. [Installing Detectron](https://github.com/facebookresearch/Detectron/blob/master/INSTALL.md)
+1. [Download the weights file with the coco keypoints #2](https://github.com/tobiascz/VideoPose3D/issues/2)
 1. [cuda10+cuDNN7.3でpytorch+caffe2をビルド](https://eigo.rumisunheart.com/2018/09/26/installing-pytorch-and-caffe2-on-cuda10-and-cudnn7/)
 1. [Error while installing pytorch #16602](https://github.com/pytorch/pytorch/issues/16602)
-1. [VideoPose3Dを動かしてみた（Detectronから）](https://qiita.com/timtoronto634/items/ee018ac89e6b9f779194)
-1. [Detectron](https://github.com/facebookresearch/Detectron)
-1. [Installing Detectron](https://github.com/facebookresearch/Detectron/blob/master/INSTALL.md)
-1. [Detectron2](https://github.com/facebookresearch/detectron2)
-1. [VideoPose3D](https://github.com/tetsu/VideoPose3D)
-1. [Download the weights file with the coco keypoints #2](https://github.com/tobiascz/VideoPose3D/issues/2)
 1. [Caffe2 installation with conda](https://anaconda.org/caffe2/caffe2)
 1. [Pytorch official installation with conda](https://pytorch.org/get-started/locally/)
+1. [[Ubuntu 18.04] CUDA Toolkit 10.1のインストール](https://qiita.com/daichi-ishida/items/db7620689502f043da56)
