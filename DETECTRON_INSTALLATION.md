@@ -136,7 +136,7 @@
    cd ~/github/VideoPose3D/detectron_tools
    python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output --wts model_final.pkl splitted_scating
    ```
-   Example
+   Example 1
    ```
    python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/pumped --output-ext png --image-ext jpg --wts model_final.pkl video/pumped
    ```
@@ -144,6 +144,11 @@
    Example 2
    ```
    python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/usa01 --output-ext png --image-ext jpg --wts model_final.pkl video/usa01
+   ```
+
+   Example 3
+   ```
+   python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/Lw17uTB0LPA --output-ext png --image-ext png --wts model_final.pkl video/Lw17uTB0LPA
    ```
 
 1. Move generated data_2d_detections.npz file to $VideoPose3D/data
@@ -198,9 +203,19 @@
    python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video InTheWildData/out_cutted.mp4 --viz-camera 0 --viz-output output_scater.mp4 --viz-size 5 --viz-downsample 1 --viz-skip 9
    ```
 
-   Example
+   Example 1
    ```
    python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video detectron_tools/video/pumped.mp4 --viz-camera 0 --viz-output output_scater.mp4 --viz-size 5 --viz-downsample 1 --viz-skip 9
+   ```
+
+   Example 2
+   ```
+   python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video detectron_tools/video/pumped.mp4 --viz-camera 0 --viz-output pumped_output_scater.mp4 --viz-size 5 --viz-downsample 1
+   ```
+
+   Example 3
+   ```
+   python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video detectron_tools/video/Lw17uTB0LPA.mp4 --viz-camera 0 --viz-output Lw17uTB0LPA_output_scater.mp4 --viz-size 5 --viz-downsample 1
    ```
 
 
