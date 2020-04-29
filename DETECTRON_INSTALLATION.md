@@ -151,6 +151,13 @@
    python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/Lw17uTB0LPA --output-ext png --image-ext png --wts model_final.pkl video/Lw17uTB0LPA
    ```
 
+   Example 4
+   ```
+   python infer_simple.py --cfg e2e_keypoint_rcnn_R-101-FPN_s1x.yaml --output-dir output/81orGqHqffI --output-ext png --image-ext png --wts model_final.pkl video/81orGqHqffI
+   ```
+
+   
+
 1. Move generated data_2d_detections.npz file to $VideoPose3D/data
    ```
    mv ~/github/VideoPose3D/{file location} ~/github/VideoPose3D/data
@@ -160,7 +167,7 @@
 
 1. Create a new Anaconda environment for VideoPose3D
    ```
-   conda create -n VideoPose3D python=3.6 numpy=1.16.2 matplotlib scipy yaml pyyaml=3.12 protobuf opencv cython future
+   conda create -n VideoPose3D python=3.6 numpy=1.16.2 matplotlib scipy yaml pyyaml=3.12 protobuf opencv cython future psutil
    conda activate VideoPose3D
    conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
    conda install cudnn
@@ -216,6 +223,11 @@
    Example 3
    ```
    python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video detectron_tools/video/Lw17uTB0LPA.mp4 --viz-camera 0 --viz-output Lw17uTB0LPA_output_scater.mp4 --viz-size 5 --viz-downsample 1
+   ```
+
+   Example 4
+   ```
+   python run_wild.py -k detections -arc 3,3,3,3,3 -c checkpoint --evaluate d-pt-243.bin --render --viz-subject S1 --viz-action Directions --viz-video detectron_tools/video/81orGqHqffI.webm --viz-camera 0 --viz-output 81orGqHqffI_output_scater.mp4
    ```
 
 

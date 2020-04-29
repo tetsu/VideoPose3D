@@ -15,6 +15,7 @@ import numpy as np
 import subprocess as sp
 import glob
 import cv2
+import psutil
 
 # path of ffmpeg installed via apt, but not via conda
 plt.rcParams['animation.ffmpeg_path'] =  '/usr/bin/ffmpeg'
@@ -103,7 +104,14 @@ def render_animation(keypoints, poses, skeleton, fps, bitrate, azim, output, vie
         # Load video using ffmpeg
         all_frames = []
         for f in read_video(input_video_path, skip=input_video_skip):
-            all_frames.append(f)
+            mem = psutil.virtual_memory()
+            if mem.available > mem.total / 4:
+                all_frames.append(f)
+            else:
+                # TODO: Rewrite with numpy.memmap or soemething else
+                # to store data in storage in case video file is too big.
+                print('File size is too big!')
+                break
         effective_length = min(keypoints.shape[0], len(all_frames))
         all_frames = all_frames[:effective_length]
     
